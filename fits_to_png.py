@@ -9,6 +9,8 @@ import matplotlib.colors as mcolor
 import numpy as np
 import sunpy.map
 
+from products import *
+
 fits_dir = Path('/Volumes/Work/Data/solo/eui_fits')
 
 
@@ -20,18 +22,30 @@ def remove_duplicates(map_list):
     return names
 
 
-def all_fits_to_png(product):
-    assert product in ['fsi174', 'fsi304', 'hrilya1216', 'hrieuv174']
-    euimaps = sorted(glob.glob(f'{fits_dir}/solo_L2_eui-{product}-image_*.fits'))
-    euimaps = remove_duplicates(euimaps)
-    print(f"Found {len(euimaps)} maps")
+def get_map_paths(product):
+    """
+    Get all maps of a given data product, remove version duplicates.
 
-    cmap = {'fsi174': f'solar orbiterfsi174',
-            'fsi304': 'solar orbiterfsi304',
-            'hrilya1216': 'solar orbiterhri_lya1216',
-            'hrieuv174': 'solar orbiterhri_euv174'}[product]
-    cmap = plt.get_cmap(cmap)
-    png_dir = f'/Volumes/Work/Data/solo/eui_png/{product}'
+    Parameters
+    ----------
+    product: product
+
+    Returns
+    -------
+    list[str]
+        List of all detected filepaths.
+    """
+    check_product(product)
+    euimaps = sorted(glob.glob(f'{fits_dir}/solo_L2_eui-{product.name}-image_*.fits'))
+    euimaps = remove_duplicates(euimaps)
+    return euimaps
+
+
+def all_fits_to_png(product):
+    euimaps = get_map_paths(product)
+
+    cmap = plt.get_cmap(product.cmap)
+    png_dir = f'/Volumes/Work/Data/solo/eui_png/{product.name}'
 
     for f in euimaps:
         date = Time.strptime(f.name[-27:-12], '%Y%m%dT%H%M%S')
@@ -73,7 +87,3 @@ def all_fits_to_png(product):
         plt.ylim(bottom_left.y.value, top_right.y.value)
         fig.savefig(png_fname)
         plt.close('all')
-
-
-if __name__ == '__main__':
-    all_fits_to_png('fsi304')

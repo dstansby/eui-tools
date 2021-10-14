@@ -1,5 +1,6 @@
 import glob
 from pathlib import Path
+import os
 
 from astropy.coordinates import SkyCoord
 from astropy.time import Time
@@ -46,6 +47,7 @@ def all_fits_to_png(product):
 
     cmap = plt.get_cmap(product.cmap)
     png_dir = f'/Volumes/Work/Data/solo/eui_png/{product.name}'
+    broken_files = []
 
     for f in euimaps:
         date = Time.strptime(f.name[-27:-12], '%Y%m%dT%H%M%S')
@@ -60,6 +62,7 @@ def all_fits_to_png(product):
             m = sunpy.map.Map(f)
         except Exception:
             print(f'❌ {f}')
+            broken_files.append(f)
             continue
         m.meta['crota2'] = m.meta.pop('crota')
 
@@ -90,3 +93,9 @@ def all_fits_to_png(product):
         plt.ylim(bottom_left.y.value, top_right.y.value)
         fig.savefig(png_fname)
         plt.close('all')
+
+    if len(broken_files):
+        print(f'Found {len(broken_files)} broken files')
+        if input('Remove files? [y/N]: ') == 'y':
+            for f in broken_files:
+                os.remove(f)

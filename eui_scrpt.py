@@ -1,10 +1,6 @@
 import glob
 from pathlib import Path
 
-import sunpy.net.attrs as a
-from sunpy.net import Fido
-from sunpy_soar.attrs import Identifier
-
 from astropy.coordinates import SkyCoord
 from astropy.time import Time
 import astropy.units as u
@@ -14,17 +10,6 @@ import numpy as np
 import sunpy.map
 
 fits_dir = Path('/Volumes/Work/Data/solo/eui_fits')
-
-
-def get_eui():
-    id = a.Instrument('EUI')
-    time = a.Time('2020-06-15', '2020-07-01')
-    level = a.Level(2)
-    identifier = Identifier('EUI-FSI174-IMAGE')
-
-    res = Fido.search(id, time, level, identifier)
-    print(res)
-    files = Fido.fetch(res, path='/Volumes/Work/Data/solo/eui_fits')
 
 
 def remove_duplicates(map_list):

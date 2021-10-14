@@ -26,7 +26,7 @@ def get_eui(product, start_time, end_time, dl_path):
     id = a.Instrument('EUI')
     time = a.Time(start_time, end_time)
     level = a.Level(2)
-    identifier = Identifier(f'EUI-{product.name.upper()}.-IMAGE')
+    identifier = Identifier(f'EUI-{product.name.upper()}-IMAGE')
 
     res = Fido.search(id, time, level, identifier)
     print(res)

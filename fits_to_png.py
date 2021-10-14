@@ -73,9 +73,12 @@ def all_fits_to_png(product):
 
         fig = plt.figure()
 
-        vmin = max(np.nanpercentile(m.data, 1), 10)
-        vmax = max(np.nanpercentile(m.data, 100), 100)
-        vmax = 10**(np.ceil(np.log10(vmax)))
+        vmin, vmax = product.vmin, product.vmax
+        if vmin is None:
+            vmin = max(np.nanpercentile(m.data, 1), 10)
+        if vmax is None:
+            vmax = max(np.nanpercentile(m.data, 100), 100)
+            vmax = 10**(np.ceil(np.log10(vmax)))
 
         norm = mcolor.LogNorm(vmin=vmin, vmax=vmax)
         m.plot(cmap=cmap, norm=norm)

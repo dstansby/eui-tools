@@ -5,9 +5,11 @@ from dataclasses import dataclass
 class Product:
     name: str
     cmap: str
+    vmin: float = None
+    vmax: float = None
 
 
-FSI174 = Product('fsi174', 'solar orbiterfsi174')
+FSI174 = Product('fsi174', 'solar orbiterfsi174', vmin=1e1, vmax=1e4)
 FSI304 = Product('fsi304', 'solar orbiterfsi304')
 HRIEUV174 = Product('hrieuv174', 'solar orbiterhri_lya1216')
 HRILYA1216 = Product('hrilya1216', 'solar orbiterhri_euv174')

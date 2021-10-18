@@ -10,17 +10,9 @@ import matplotlib.colors as mcolor
 import numpy as np
 import sunpy.map
 
+from config import fits_dir
+from util import remove_duplicates
 from products import *
-
-fits_dir = Path('/Volumes/Work/Data/solo/eui_fits')
-
-
-def remove_duplicates(map_list):
-    fnames = [Path(f).name for f in map_list]
-    # Because fnames is sorted, only the larger version number will be saved
-    fname_versions = {name[:-7]: int(name[-7:-5]) for name in sorted(fnames)}
-    names = [fits_dir / (name + str(version).zfill(2) + '.fits') for name, version in fname_versions.items()]
-    return names
 
 
 def get_map_paths(product):
